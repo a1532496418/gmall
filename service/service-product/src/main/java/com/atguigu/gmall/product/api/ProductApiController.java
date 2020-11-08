@@ -30,7 +30,7 @@ public class ProductApiController {
      */
     @GetMapping("inner/getSkuInfo/{skuId}")
     public SkuInfo getSkuInfo(@PathVariable Long skuId){
-        //  select * from sku_info where id = skuId;
+        //  select * from sku_info where id = skuId1;
        return manageService.getSkuInfo(skuId);
     }
 
