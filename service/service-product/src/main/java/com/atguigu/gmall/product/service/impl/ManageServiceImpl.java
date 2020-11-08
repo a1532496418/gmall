@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
 
+import java.math.BigDecimal;
 import java.util.List;
 @Service
 public class ManageServiceImpl implements ManageService {
@@ -45,6 +46,8 @@ public class ManageServiceImpl implements ManageService {
     private SkuAttrValueMapper skuAttrValueMapper;
     @Autowired
     private SkuSaleAttrValueMapper skuSaleAttrValueMapper;
+    @Autowired
+    private BaseCategoryViewMapper baseCategoryViewMapper;
 
     @Override
     public List<BaseCategory1> getCategory1() {
@@ -277,6 +280,38 @@ public class ManageServiceImpl implements ManageService {
         skuInfo.setId(skuId);
         skuInfo.setIsSale(0);
         skuInfoMapper.updateById(skuInfo);
+    }
+
+    @Override
+    public SkuInfo getSkuInfo(Long skuId) {
+        SkuInfo skuInfo = skuInfoMapper.selectById(skuId);
+        //根据skuId查询图片集合
+        if(skuInfo!=null){
+            QueryWrapper<SkuImage> skuImageQueryWrapper = new QueryWrapper<>();
+            skuImageQueryWrapper.eq("sku_id",skuId);
+            List<SkuImage> skuImageList = skuImageMapper.selectList(skuImageQueryWrapper);
+            skuInfo.setSkuImageList(skuImageList);
+        }
+        return skuInfo;
+    }
+
+    @Override
+    public BaseCategoryView getCategoryViewByCategory3Id(Long category3Id) {
+        return baseCategoryViewMapper.selectById(category3Id);
+    }
+
+    @Override
+    public BigDecimal getSkuPrice(Long skuId) {
+        SkuInfo skuInfo = skuInfoMapper.selectById(skuId);
+        if(skuInfo!=null){
+            return skuInfo.getPrice();
+        }
+        return new BigDecimal("0");
+    }
+
+    @Override
+    public List<SpuSaleAttr> getSpuSaleAttrListCheckBySku(Long skuId, Long spuId) {
+        return spuSaleAttrMapper.selectSpuSaleAttrListCheckBySku(skuId,spuId);
     }
 
 

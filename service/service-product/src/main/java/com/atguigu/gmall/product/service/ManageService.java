@@ -2,10 +2,12 @@ package com.atguigu.gmall.product.service;
 
 import com.atguigu.gmall.model.product.*;
 
+import com.atguigu.gmall.product.mapper.BaseCategoryViewMapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 public interface ManageService {
@@ -101,4 +103,22 @@ public interface ManageService {
     void onSale(Long skuId);
     //下架
     void cancelSale(Long skuId);
+    /**
+     * 根据skuId获取sku基本信息与图片信息
+     * @param skuId
+     * @return
+     */
+    SkuInfo getSkuInfo(Long skuId);
+
+    /**
+     * 通过三级分类id查询
+     * @param category3Id
+     * @return
+     */
+    BaseCategoryView getCategoryViewByCategory3Id(Long category3Id);
+    //获取商品的实时价格
+    BigDecimal getSkuPrice(Long skuId);
+    //根据spuId，skuId 查询销售属性集合
+    List<SpuSaleAttr> getSpuSaleAttrListCheckBySku(Long skuId, Long spuId);
+
 }
